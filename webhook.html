@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook - Верификация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .status.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .message-preview {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #555;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .message-preview h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .links {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .links a {
+            display: block;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 12px;
+            margin: 5px 0;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Discord Webhook</h1>
+        <p class="subtitle">Отправка сообщения о верификации</p>
+        
+        <div id="status" class="status"></div>
+        
+        <button id="sendBtn" class="button" onclick="sendWebhook()">
+            📤 Отправить сообщение
+        </button>
+        
+        <div class="message-preview">
+            <h3>📋 Предпросмотр сообщения:</h3>
+            <strong>Проходи верификацию!</strong>
+            <p style="margin-top: 10px; color: #666;">
+                Забегайте в любую проходную комнату и пройдите верификацию для доступа к общим чатам и голосовым каналам!
+            </p>
+            <div class="links">
+                <strong>Каналы верификации:</strong>
+                <a href="https://discord.com/channels/1510029178043498556/1510032692706672810">📍 Канал 1</a>
+                <a href="https://discord.com/channels/1510029178043498556/1510032894196973748">📍 Канал 2</a>
+                <a href="https://discord.com/channels/1510029178043498556/1510032973746147629">📍 Канал 3</a>
+                <a href="https://discord.com/channels/1510029178043498556/1510033250788311241">📍 Канал 4</a>
+                <a href="https://discord.com/channels/1510029178043498556/1510033318723321876">📍 Канал 5</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1510055137282887780/r7MRwpieCHUr2Il5gSTsliY6cKpQDGdemvCsNX70RIMekhoNBqQU0lbvlVvNyZS-746n';
+
+        async function sendWebhook() {
+            const btn = document.getElementById('sendBtn');
+            const statusDiv = document.getElementById('status');
+            
+            btn.disabled = true;
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = '⏳ Отправка сообщения...';
+            
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: '# Проходи верификацию!\n\n> Забегайте в любую проходную комнату \n> <&@1510030760860450927>проведут вам верификацию \n\n- https://discord.com/channels/1510029178043498556/1510032692706672810\n- https://discord.com/channels/1510029178043498556/1510032894196973748\n- https://discord.com/channels/1510029178043498556/1510032973746147629\n- https://discord.com/channels/1510029178043498556/1510033250788311241\n- https://discord.com/channels/1510029178043498556/1510033318723321876\n\n> После **быстрой верификации**, вы получите доступ\n> к общению в **общих чатах и голосовых каналах!**'
+                    })
+                });
+                
+                if (response.ok) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ Сообщение успешно отправлено!';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        statusDiv.style.display = 'none';
+                    }, 3000);
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '❌ Ошибка: ' + response.status + ' ' + response.statusText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Ошибка подключения: ' + error.message;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
